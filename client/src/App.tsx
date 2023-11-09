@@ -3,14 +3,14 @@ import { UserServiceClient } from "./proto/UserServiceClientPb";
 import { User } from "./proto/user_pb";
 
 const greetClient = async (name: string) => {
-  const EnvoyURL = "http://localhost:5000";
+  const EnvoyURL = "http://localhost:5050";
   const client = new UserServiceClient(EnvoyURL);
   const request = new User();
   request.setName(name);
   const response = await client.createUser(request, {});
   console.log(response);
   const div = document.getElementById("response");
-  if (div) div.innerText = response.getName();
+  if (div) div.innerText = "Hello, " + response.getName();;
 };
 
 function App() {
