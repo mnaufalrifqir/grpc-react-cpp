@@ -1,0 +1,18 @@
+FROM    alpine:3.15.1 AS build
+
+WORKDIR /app
+
+RUN     apk add --no-cache protoc
+
+COPY ./server/src/protos/google/protobuf/wrappers.proto /app/google/protobuf/
+COPY ./server/src/protos/google/protobuf/empty.proto /app/google/protobuf/
+COPY ./server/src/protos/user.proto .
+COPY    ./server/src/protos/user.proto .
+
+# build proto descriptor
+RUN     protoc --include_imports --include_source_info \
+                --descriptor_set_out=user.pb user.proto
+
+FROM    envoyproxy/envoy:v1.22.0
+
+COPY    --from=build /app/user.pb /tmp/
